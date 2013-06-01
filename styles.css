@@ -1,0 +1,41 @@
+/**
+ *  MAJ Hub block
+ *  
+ *  @author  VERSION2, Inc. (http://ver2.jp)
+ *  @version $Id: styles.css 212 2013-02-07 01:38:19Z malu $
+ */
+.block_majhub div.editmetadata img { margin:-2px 2px -3px 0; }
+.block_majhub table.metadata { font-size:90%; line-height:90%; margin:0; }
+.block_majhub table.metadata tr th { text-align:right; padding:0.5em 0; }
+.block_majhub table.metadata tr td { text-align:left; padding-right:0; }
+.block_majhub table.metadata .toggle { cursor:pointer; }
+.block_majhub table.metadata .toggle img { margin:0 2px 0 -8px; }
+.block_majhub span.stars { white-space:nowrap; }
+.block_majhub div.action { text-align:center; margin:0.5em; }
+.block_majhub div.action img { margin:-2px 2px -3px 0; }
+.block_majhub div.action.grayed { color:gray; }
+.block_majhub div.points { font-size:90%; text-align:right; padding-right:1em; }
+.block_majhub div.warning { color:red; font-weight:bold; margin:0.5em; }
+.block_majhub div.howto ul { margin:0 0 0.5em 1.5em; }
+.block_majhub div.reviews { font-size:90%; }
+.block_majhub div.reviews .overall { font-weight:bold; height:18px; }
+.block_majhub div.reviews .overall span { display:block; height:16px; float:left; }
+.block_majhub div.reviews .overall span.stars { margin:-2px -10px -1px 2px; }
+.block_majhub div.reviews .review { margin:0.5em 0; clear:both; float:none; }
+.block_majhub div.reviews .review .userinfo { margin:0.5em -5px 0.5em -3px; }
+.block_majhub div.reviews .review .picture { width:40px; float:left; margin-top:-2px; }
+.block_majhub div.reviews .review .rating { width:65px; float:left; }
+.block_majhub div.reviews .review .rating .stars img { width:12px; height:12px; }
+.block_majhub div.reviews .review .proscons { width:65px; float:left; margin-right:-20px; }
+.block_majhub div.reviews .review .proscons img { margin:-2px 1px -3px 1px; }
+.block_majhub div.reviews .review .fullname { width:130px; float:left; margin-right:-20px; }
+.block_majhub div.reviews .review .fullname .moderator { font-weight:bold; }
+.block_majhub div.reviews .review .fullname .moderator img { margin:0 2px -3px 0; }
+.block_majhub div.reviews .review .comment { clear:both; float:none; }
+.block_majhub div.reviews .ellipsis { text-align:center; }
+.block_majhub form.review div.action { margin-bottom:1em; }
+
+.block_majhub form.bonuspoints div { text-align:right; }
+.block_majhub form.bonuspoints div input { text-align:right; }
+
+.block_majhub .content img.userpicture { width:35px; height:35px; }
