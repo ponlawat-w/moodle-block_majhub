@@ -260,11 +260,27 @@ class block_majhub extends block_base
                 );
             $html .= self::render_input('id', $this->page->url->param('id'), 'hidden');
             $html .= get_string('pointsforquality', 'local_majhub') . ': ';
+            
+            //Old code failed when no data, changed but not yet tested Justin 20130617  
+        	$ret = $DB->get_record_sql(
+                'SELECT SUM(points) AS pointtotal FROM {majhub_bonus_points} 
+                 WHERE coursewareid = :coursewareid AND reason = :reason',
+                array('coursewareid' => $courseware->id, 'reason' => 'quality')
+                );
+            if(is_object($ret) && is_int($ret->pointtotal)){
+            	return $this->_cache[$name] = $ret->pointtotal;
+            	unset($ret);
+            }else{
+            	return $this->_cache[$name] = 0;
+            }
+            /*
             $bonuspoints = $DB->count_records_sql(
                 'SELECT SUM(points) FROM {majhub_bonus_points}
                  WHERE coursewareid = :coursewareid AND reason = :reason',
                 array('coursewareid' => $courseware->id, 'reason' => 'quality')
                 );
+            */
+            
             if ($bonuspoints > 0) {
                 $html .= html_writer::tag('span', $bonuspoints);
             } else {
