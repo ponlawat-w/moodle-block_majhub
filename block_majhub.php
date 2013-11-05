@@ -67,6 +67,8 @@ class block_majhub extends block_base
             if ($bonuspointsforquality != 0) {
                 $bonuspoint = new stdClass;
                 $bonuspoint->coursewareid = $courseware->id;
+                $bonuspoint->siteid = $courseware->siteid;
+                $bonuspoint->sitecourseid = $courseware->sitecourseid;
                 $bonuspoint->userid       = $USER->id;
                 $bonuspoint->reason       = 'quality';
                 $bonuspoint->points       = $bonuspointsforquality;
@@ -273,11 +275,19 @@ class block_majhub extends block_base
             $html .= self::render_input('id', $this->page->url->param('id'), 'hidden');
             $html .= get_string('pointsforquality', 'local_majhub') . ': ';
  
-            //Old code failed when no data, changed but not yet tested Justin 20130617  
+            //changed for siteid and sitecourseid
+            /*
         	$ret = $DB->get_record_sql(
                 'SELECT SUM(points) AS pointtotal FROM {majhub_bonus_points} 
                  WHERE coursewareid = :coursewareid AND reason = :reason',
                 array('coursewareid' => $courseware->id, 'reason' => 'quality')
+                );
+                */
+            
+            $ret = $DB->get_record_sql(
+                'SELECT SUM(points) AS pointtotal FROM {majhub_bonus_points} 
+                 WHERE siteid = :siteid AND sitecourseid = :sitecourseid AND reason = :reason',
+                array('siteid' => $courseware->siteid, 'sitecourseid' => $courseware->sitecourseid,'reason' => 'quality')
                 );
 
 			if(is_object($ret) && is_numeric($ret->pointtotal) && $ret->pointtotal > 0 ){
@@ -286,7 +296,7 @@ class block_majhub extends block_base
             }else{
             	$bonuspoints = 0;
             }
-				echo ($bonuspoints);
+	
 			/*	
             if(is_object($ret) && is_int($ret->pointtotal)){
             	return $this->_cache[$name] = $ret->pointtotal;
