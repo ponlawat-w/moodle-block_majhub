@@ -75,6 +75,9 @@ class block_majhub extends block_base
             }
             redirect($this->page->url);
         }
+		
+		
+		
         if (optional_param('editreview', null, PARAM_TEXT)) {
             $rating  = optional_param('rating', 0, PARAM_INT);
             $comment = trim(optional_param('comment', '', PARAM_TEXT));
@@ -85,6 +88,8 @@ class block_majhub extends block_base
                     $review = new stdClass;
                     $review->userid       = $USER->id;
                     $review->coursewareid = $courseware->id;
+					$review->siteid = $courseware->siteid;
+					$review->sitecourseid = $courseware->sitecourseid;
                     $review->rating       = $rating;
                     $review->comment      = $comment;
                     $review->timecreated  = time();
@@ -119,7 +124,7 @@ class block_majhub extends block_base
             get_string('contributor', 'local_majhub') => $userlink,
             get_string('uploadedat', 'local_majhub')  => userdate($courseware->timerestored, $dateformat),
             get_string('filesize', 'local_majhub')    => display_size($courseware->filesize),
-        //  get_string('version', 'local_majhub')     => $courseware->version,
+			get_string('moodleversion', 'local_majhub')     => $courseware->backuprelease
             );
 
         if ($isowner || $isadmin /* || $ismoderator */) {
@@ -131,6 +136,9 @@ class block_majhub extends block_base
                 array('class' => 'editmetadata')
                 );
         }
+		
+		//echo "html:" . $html;
+		
         $html .= html_writer::start_tag('table', array('class' => 'metadata'));
         foreach ($fixedrows as $name => $value) {
             $html .= self::render_row($name, $value);
@@ -143,7 +151,7 @@ class block_majhub extends block_base
         $html .= html_writer::end_tag('table');
 
         $html .= html_writer::empty_tag('hr');
-
+		
         // actions
         $downloadcost = majhub\point::get_settings()->pointsfordownloading;
         $downloadurl = new moodle_url('/local/majhub/download.php', array('id' => $courseware->id));
@@ -161,6 +169,8 @@ class block_majhub extends block_base
         } else {
             $html .= html_writer::tag('div', $strdownload, array('class' => 'action download grayed'));
         }
+		
+		
         if (!$paid) {
             $html .= html_writer::tag('div',
                 get_string('costspoints', 'local_majhub', $downloadcost), array('class' => 'points'));
@@ -178,7 +188,8 @@ class block_majhub extends block_base
         }
 
         $html .= html_writer::empty_tag('hr');
-
+		
+ 
         // reviews
         $reviews = $courseware->get_reviews(optional_param('showallreviews', 0, PARAM_INT) ? 0 : self::MAX_REVIEWS);
         $reviewed = $courseware->is_reviewed_by($USER->id);
@@ -224,6 +235,7 @@ class block_majhub extends block_base
                 array('class' => 'action review', 'title' => get_string('review', 'local_majhub'))
                 );
         }
+		
         $moderatoricon = $OUTPUT->pix_icon('f/moodle', get_string('moderator', 'local_majhub'));
         foreach ($reviews as $review) {
             $fullname = fullname($review->user);
@@ -251,7 +263,7 @@ class block_majhub extends block_base
                 );
         }
         $html .= html_writer::end_tag('div'); // reviews
-
+		
         // moderator actions
         if ($ismoderator) {
             $html .= html_writer::empty_tag('hr');
@@ -260,19 +272,29 @@ class block_majhub extends block_base
                 );
             $html .= self::render_input('id', $this->page->url->param('id'), 'hidden');
             $html .= get_string('pointsforquality', 'local_majhub') . ': ';
-            
+ 
             //Old code failed when no data, changed but not yet tested Justin 20130617  
         	$ret = $DB->get_record_sql(
                 'SELECT SUM(points) AS pointtotal FROM {majhub_bonus_points} 
                  WHERE coursewareid = :coursewareid AND reason = :reason',
                 array('coursewareid' => $courseware->id, 'reason' => 'quality')
                 );
+
+			if(is_object($ret) && is_numeric($ret->pointtotal) && $ret->pointtotal > 0 ){
+            	$bonuspoints = $ret->pointtotal;
+            	unset($ret);
+            }else{
+            	$bonuspoints = 0;
+            }
+				echo ($bonuspoints);
+			/*	
             if(is_object($ret) && is_int($ret->pointtotal)){
             	return $this->_cache[$name] = $ret->pointtotal;
             	unset($ret);
             }else{
             	return $this->_cache[$name] = 0;
             }
+			*/
             /*
             $bonuspoints = $DB->count_records_sql(
                 'SELECT SUM(points) FROM {majhub_bonus_points}
@@ -280,6 +302,7 @@ class block_majhub extends block_base
                 array('coursewareid' => $courseware->id, 'reason' => 'quality')
                 );
             */
+			
             
             if ($bonuspoints > 0) {
                 $html .= html_writer::tag('span', $bonuspoints);
@@ -293,10 +316,11 @@ class block_majhub extends block_base
             }
             $html .= html_writer::end_tag('form');
         }
+		
 
         $this->page->requires->js_init_call('M.block_majhub.init');
         $this->page->requires->string_for_js('optionalfields', 'local_majhub');
-
+		
         return $this->content = (object)array('text' => $html);
     }
 
@@ -376,7 +400,7 @@ class block_majhub extends block_base
              ? html_writer::link($url, $host, array('title' => $url))
              : $url;
     }
-
+	
     /**
      *  Renders rating starts
      *  
