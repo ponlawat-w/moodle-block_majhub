@@ -4,3 +4,4 @@ $string['pluginname'] = 'MAJ Community Hub';
 $string['blocktitle'] = 'Courseware info';
 
 $string['editmetadata'] = 'Edit metadata';
+$string['manageversions'] = 'Manage Versions';

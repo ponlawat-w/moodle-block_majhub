@@ -238,6 +238,20 @@ class block_majhub extends block_base
                 );
         }
 		
+		//Manage Versions
+		$course = $this->page->course; 
+		$coursecontext = context_course::instance($course->id);
+        if(has_capability('block/majhub:manageversions',$coursecontext)) {
+			$downloadurl = new moodle_url('/blocks/majhub/manageversions.php', array('courseid'=>$course->id, 'coursewareid' => $courseware->id));
+			$strdownload = $OUTPUT->pix_icon('t/download', '') .  get_string('manageversions', 'block_majhub');
+			$attrdownload = array('title' => get_string('manageversions', 'block_majhub'));
+			$html .= html_writer::empty_tag('hr');
+			$html .= html_writer::start_tag('div', array('class' => 'action manageversions'));
+            $html .= $OUTPUT->action_link($downloadurl, $strdownload, null, $attrdownload);
+            $html .= html_writer::end_tag('div');
+			$html .= html_writer::empty_tag('hr');
+		}
+		
         $moderatoricon = $OUTPUT->pix_icon('f/moodle', get_string('moderator', 'local_majhub'));
         foreach ($reviews as $review) {
             $fullname = fullname($review->user);
