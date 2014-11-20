@@ -242,7 +242,7 @@ class block_majhub extends block_base
 		$course = $this->page->course; 
 		$coursecontext = context_course::instance($course->id);
         if(has_capability('block/majhub:manageversions',$coursecontext)) {
-			$downloadurl = new moodle_url('/blocks/majhub/manageversions.php', array('courseid'=>$course->id, 'coursewareid' => $courseware->id));
+			$downloadurl = new moodle_url('/blocks/majhub/manageversions.php', array('courseid'=>$course->id));
 			$strdownload = $OUTPUT->pix_icon('t/download', '') .  get_string('manageversions', 'block_majhub');
 			$attrdownload = array('title' => get_string('manageversions', 'block_majhub'));
 			$html .= html_writer::empty_tag('hr');
