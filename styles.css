@@ -34,6 +34,9 @@
 .block_majhub div.reviews .review .comment { clear:both; float:none; }
 .block_majhub div.reviews .ellipsis { text-align:center; }
 .block_majhub form.review div.action { margin-bottom:1em; }
+.block_majhub_form_table th tr {
+	border: 1px solid black;
+}
 
 .block_majhub form.bonuspoints div { text-align:right; }
 .block_majhub form.bonuspoints div input { text-align:right; }

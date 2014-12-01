@@ -58,7 +58,7 @@ $course = $DB->get_record('course', array('id'=>$id), '*', MUST_EXIST);
 require_login($course);
 require_sesskey();
 
-if (!has_capability('moodle/course:publish', context_course::instance($id))
+if (!has_capability('block/majhub:manageversions', context_course::instance($id))
         or !confirm_sesskey()) {
     throw new moodle_exception('nopermission');
 }
