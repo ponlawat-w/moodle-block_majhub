@@ -2,11 +2,11 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2014111801;
+$plugin->version   = 2018011500;
 $plugin->release   = '2.3, release 3';
 $plugin->requires  = 2012062500.00; // Moodle 2.3.0
 $plugin->component = 'block_majhub';
 
 $plugin->dependencies = array(
-    'local_majhub' => 2013020700,
+    'local_majhub' => 2018011500,
 );
