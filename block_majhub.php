@@ -77,30 +77,7 @@ class block_majhub extends block_base
             }
             redirect($this->page->url);
         }
-		
-		
-		
-        if (optional_param('editreview', null, PARAM_TEXT)) {
-            $rating  = optional_param('rating', 0, PARAM_INT);
-            $comment = trim(optional_param('comment', '', PARAM_TEXT));
-            if ($rating > 0 && strlen($comment) >= majhub\point::get_settings()->lengthforreviewing) {
-                if (!$DB->record_exists('majhub_courseware_reviews',
-                    array('userid' => $USER->id, 'coursewareid' => $courseware->id)))
-                {
-                    $review = new stdClass;
-                    $review->userid       = $USER->id;
-                    $review->coursewareid = $courseware->id;
-					$review->siteid = $courseware->siteid;
-					$review->sitecourseid = $courseware->sitecourseid;
-                    $review->rating       = $rating;
-                    $review->comment      = $comment;
-                    $review->timecreated  = time();
-                    $review->timemodified = time();
-                    $DB->insert_record('majhub_courseware_reviews', $review);
-                }
-                redirect($this->page->url);
-            }
-        }
+
         if ($pro = optional_param('pro', 0, PARAM_INT) or $con = optional_param('con', 0, PARAM_INT)) {
             $reviewid = $pro ?: $con;
             if (!$DB->record_exists('majhub_review_proscons',
@@ -201,20 +178,34 @@ class block_majhub extends block_base
             self::render_rating($courseware->avarage_rating),
             array('class' => 'overall')
             );
-        if ($reviewed) {
-            // should the review be modifiable?
-        } elseif (optional_param('editreview', null, PARAM_TEXT)) {
+
+        $editreview = optional_param('editreview', null, PARAM_TEXT);
+        if ($editreview) {
+
             $rating  = optional_param('rating', 0, PARAM_INT);
             $comment = trim(optional_param('comment', '', PARAM_TEXT));
+
+            if($reviewed && $rating == 0 && $comment == '') {
+                $review = $DB->get_record('majhub_courseware_reviews', array('userid' => $USER->id, 'coursewareid' => $courseware->id));
+                if ($review) {
+                    $rating = $review->rating;
+                    $comment = $review->comment;
+                }
+                else {
+                    $rating = 0;
+                    $comment = '';
+                }
+            }
+
             $stars = array();
             foreach (range(1, 5) as $r) {
                 $attrs = ($r * 2 == $rating) ? array('checked' => 'checked') : null;
                 $stars[] = html_writer::tag('label', self::render_input('rating', $r * 2, 'radio', $attrs) . $r);
             }
             $html .= html_writer::start_tag('form',
-                array('action' => $this->page->url, 'method' => 'post', 'class' => 'mform review')
+                array('action' => new moodle_url('/local/majhub/postreview.php'), 'method' => 'post', 'class' => 'mform review')
                 );
-            $html .= self::render_input('id', $this->page->url->param('id'), 'hidden');
+            $html .= self::render_input('courseid', $this->page->course->id, 'hidden');
             $html .= html_writer::start_tag('div', array('class' => 'review'));
             $html .= html_writer::tag('div', get_string('rating', 'local_majhub') . ': ' . implode(' ', $stars));
             $html .= html_writer::tag('div',
@@ -229,12 +220,16 @@ class block_majhub extends block_base
             $html .= html_writer::end_tag('div');
             $html .= html_writer::end_tag('form');
         } else {
+
+            $reviewbuttonntext = $reviewed ? get_string('editreview', 'block_majhub') : get_string('writereview', 'block_majhub');
+            $iconpix = $reviewed ? $OUTPUT->pix_icon('i/edit', '') : $OUTPUT->pix_icon('t/add', '');
+
             $html .= html_writer::tag('div',
                 html_writer::link(
                     new moodle_url($this->page->url, array('editreview' => 1)),
-                    $OUTPUT->pix_icon('t/add', '') . get_string('review', 'local_majhub')
+                    $iconpix . $reviewbuttonntext
                     ),
-                array('class' => 'action review', 'title' => get_string('review', 'local_majhub'))
+                array('class' => 'action review', 'title' => $reviewbuttonntext)
                 );
         }
 		
@@ -263,7 +258,9 @@ class block_majhub extends block_base
                 html_writer::tag('div', $OUTPUT->user_picture($review->user), array('class' => 'picture')) .
                 html_writer::tag('div', self::render_rating($review->rating), array('class' => 'rating')) .
                 html_writer::tag('div', $this->render_proscons($review->id), array('class' => 'proscons')) .
-                html_writer::tag('div', $fullname, array('class' => 'fullname')),
+                html_writer::tag('div',
+                    html_writer::tag('a', $fullname, array('href' => new moodle_url('/user/view.php', array('id' => $review->userid, 'course' => $this->page->course->id)))),
+                    array('class' => 'fullname')),
                 array('class' => 'userinfo')
                 );
             $html .= html_writer::tag('div', nl2br(clean_text($review->comment)), array('class' => 'comment'));

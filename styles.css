@@ -24,12 +24,12 @@
 .block_majhub div.reviews .review { margin:0.5em 0; clear:both; float:none; }
 .block_majhub div.reviews .review .userinfo { margin:0.5em -5px 0.5em -3px; }
 .block_majhub div.reviews .review .picture { width:40px; float:left; margin-top:-2px; }
-.block_majhub div.reviews .review .rating { width:65px; float:left; }
+.block_majhub div.reviews .review .rating { float:left; }
 .block_majhub div.reviews .review .rating .stars img { width:12px; height:12px; }
-.block_majhub div.reviews .review .proscons { width:65px; float:left; margin-right:-20px; }
+.block_majhub div.reviews .review .proscons { float:left; margin-right:-20px; }
 .block_majhub div.reviews .review .proscons img { margin:-2px 1px -3px 1px; }
-.block_majhub div.reviews .review .fullname { width:130px; float:left; margin-right:-20px; }
-.block_majhub div.reviews .review .fullname .moderator { font-weight:bold; }
+.block_majhub div.reviews .review .fullname { float: right; }
+.block_majhub div.reviews .review .fullname .moderator { width: 100%; font-weight:bold; }
 .block_majhub div.reviews .review .fullname .moderator img { margin:0 2px -3px 0; }
 .block_majhub div.reviews .review .comment { clear:both; float:none; }
 .block_majhub div.reviews .ellipsis { text-align:center; }

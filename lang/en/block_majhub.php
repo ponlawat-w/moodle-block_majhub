@@ -29,3 +29,5 @@ $string['confirmversiondelete'] = 'Do you really want to delete version: {$a} ?'
 $string['selectcurrentversionform'] = "Select the 'Current' Version (ie the download file)";
 $string['versionnotdeletedfilesystem'] = "A problem occurred and the version was removed from the database, but the files could not be deleted.";
 $string['versionnotdeleteddb'] = "A database problem occurred and the version was not removed.";
+$string['writereview'] = 'Write a review';
+$string['editreview'] = 'Edit your review';
