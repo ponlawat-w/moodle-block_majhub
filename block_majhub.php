@@ -130,6 +130,19 @@ class block_majhub extends block_base
         $html .= html_writer::end_tag('table');
 
         $html .= html_writer::empty_tag('hr');
+
+        //Manage Versions
+        $course = $this->page->course;
+        $coursecontext = context_course::instance($course->id);
+        if(has_capability('block/majhub:manageversions',$coursecontext)) {
+            $downloadurl = new moodle_url('/blocks/majhub/manageversions.php', array('courseid'=>$course->id));
+            $strdownload = $OUTPUT->pix_icon('t/download', '') .  get_string('manageversions', 'block_majhub');
+            $attrdownload = array('title' => get_string('manageversions', 'block_majhub'));
+            $html .= html_writer::start_tag('div', array('class' => 'action manageversions'));
+            $html .= $OUTPUT->action_link($downloadurl, $strdownload, null, $attrdownload);
+            $html .= html_writer::end_tag('div');
+            $html .= html_writer::empty_tag('hr');
+        }
 		
         // actions
         $downloadcost = majhub\point::get_settings()->pointsfordownloading;
@@ -167,8 +180,7 @@ class block_majhub extends block_base
         }
 
         $html .= html_writer::empty_tag('hr');
-		
- 
+
         // reviews
         $reviews = $courseware->get_reviews(optional_param('showallreviews', 0, PARAM_INT) ? 0 : self::MAX_REVIEWS);
         $reviewed = $courseware->is_reviewed_by($USER->id);
@@ -232,21 +244,7 @@ class block_majhub extends block_base
                 array('class' => 'action review', 'title' => $reviewbuttonntext)
                 );
         }
-		
-		//Manage Versions
-		$course = $this->page->course; 
-		$coursecontext = context_course::instance($course->id);
-        if(has_capability('block/majhub:manageversions',$coursecontext)) {
-			$downloadurl = new moodle_url('/blocks/majhub/manageversions.php', array('courseid'=>$course->id));
-			$strdownload = $OUTPUT->pix_icon('t/download', '') .  get_string('manageversions', 'block_majhub');
-			$attrdownload = array('title' => get_string('manageversions', 'block_majhub'));
-			$html .= html_writer::empty_tag('hr');
-			$html .= html_writer::start_tag('div', array('class' => 'action manageversions'));
-            $html .= $OUTPUT->action_link($downloadurl, $strdownload, null, $attrdownload);
-            $html .= html_writer::end_tag('div');
-			$html .= html_writer::empty_tag('hr');
-		}
-		
+
         $moderatoricon = $OUTPUT->pix_icon('f/moodle', get_string('moderator', 'local_majhub'));
         foreach ($reviews as $review) {
             $fullname = fullname($review->user);

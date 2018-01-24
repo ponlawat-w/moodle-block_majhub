@@ -4,10 +4,10 @@
  *  @author  VERSION2, Inc. (http://ver2.jp)
  *  @version $Id: styles.css 212 2013-02-07 01:38:19Z malu $
  */
-.block_majhub div.editmetadata img { margin:-2px 2px -3px 0; }
-.block_majhub table.metadata { font-size:90%; line-height:90%; margin:0; }
-.block_majhub table.metadata tr th { text-align:right; padding:0.5em 0; }
-.block_majhub table.metadata tr td { text-align:left; padding-right:0; }
+.block_majhub div.editmetadata img { margin: 0 2px 0 0; }
+.block_majhub table.metadata { font-size:90%; line-height:90%; margin: 5px 0 0 0; }
+.block_majhub table.metadata tr th { text-align:left; padding: 0.5em 0; }
+.block_majhub table.metadata tr td { text-align:left; padding-left: 10px; padding-right:0; }
 .block_majhub table.metadata .toggle { cursor:pointer; }
 .block_majhub table.metadata .toggle img { margin:0 2px 0 -8px; }
 .block_majhub span.stars { white-space:nowrap; }
