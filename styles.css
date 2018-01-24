@@ -6,7 +6,7 @@
  */
 .block_majhub div.editmetadata img { margin: 0 2px 0 0; }
 .block_majhub table.metadata { font-size:90%; line-height:90%; margin: 5px 0 0 0; }
-.block_majhub table.metadata tr th { text-align:left; padding: 0.5em 0; }
+.block_majhub table.metadata tr th { text-align:left; padding: 0.5em 0; white-space: nowrap; }
 .block_majhub table.metadata tr td { text-align:left; padding-left: 10px; padding-right:0; }
 .block_majhub table.metadata .toggle { cursor:pointer; }
 .block_majhub table.metadata .toggle img { margin:0 2px 0 -8px; }
